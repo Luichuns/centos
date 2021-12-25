@@ -1,0 +1,194 @@
+首先更换
+
+华为官方给出更换镜像源
+wget http://mirrors.myhuaweicloud.com/repo/mirrors_source.sh && sh mirrors_source.sh
+
+
+
+
+https://bbs.huaweicloud.com/blogs/219032
+安装centos桌面图像
+第一步安装 X Window System(图形用户接口系统)
+yum groupinstall "X Window System"
+第二步：安装gnome
+查看grouplist命令:yum grouplist
+yum -y groups install "GNOME Desktop"
+我是把下面两个一起装才成功地
+yum -y groups install "GNOME Desktop" "Graphical Administration Tools"
+
+第三步：切换桌面环境
+
+
+查看启动类型
+systemctl list-unit-files --type=target
+
+如果要设置系统桌面环境默认启动
+systemctl set-default graphical.target
+
+多用户命令行操作模式
+systemctl set-default multi-user.target
+
+
+""""""""""""""""""""""""""""""""""""不要用这种了
+切换为桌面模式 级别5
+init 5
+切换为多用户命令行模式 切换到运行级别３ 
+init 3
+""""""""""""""""""""""""""""""""""""""
+
+
+
+查看运行的级别
+runlevel
+
+
+
+
+linux有７个运行级别''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+０：系统停机模式，默认不能设为０，否则不能正常启动。所有进程将被终止，机器将有序地停止，关机时系统处于这个运行级别。
+
+１：单用户工作模式，root权限，用于系统维护，禁止远程登录。只有少数进程运行，同时所有服务也不启动。
+
+２：多用户工作模式（没有NFS网络文件系统），与３一样，只是网络文件系统服务没有启动。
+
+３：完全多用户工作模式（有NFS），登录后进入控制台命令行模式。允许多用户登录系统，是系统默认的启动级别。
+
+４：系统未使用，保留
+
+５：X11控制台，登录后进入图形GUI模式。多用户模式，并且在系统启动后运行X-Windows，给出一个图形化的登录窗口。
+
+６：系统正常关闭并重启，默认运行级别不能设为６，否则不能正常启动。所有进程被终止，系统重新启动。
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+CentOS７描述的运行级别的方式：''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+poweroff.target 关机（0级）
+rescuce.target 救援模式（2级）
+multi-user.target 多用户模式（2.3.4都是多用户模式）（multi三杀）
+graphical.target 图形界面化，桌面（5级）
+reboot.target 重启（6级）
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+切换运行级别'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+init 0：直接关机
+init 1：单用户模式
+init 2：多用户离线模式（不能联网）
+init 3：多用户文本模式（可联网）
+init 4：保留
+init 5：切换到桌面环境
+init 6：不断开机重启
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+查看桌面切换模式
+[root@huawei7 ~]# systemctl list-unit-files --type=target
+UNIT FILE                  STATE   
+anaconda.target            static  
+basic.target               static  
+bluetooth.target           static  
+cloud-config.target        static  
+cloud-init.target          static  
+cryptsetup-pre.target      static  
+cryptsetup.target          static  
+ctrl-alt-del.target        disabled
+default.target             enabled 
+emergency.target           static  
+final.target               static  
+getty-pre.target           static  
+getty.target               static  
+graphical.target           static  
+halt.target                disabled
+hibernate.target           static  
+hybrid-sleep.target        static  
+initrd-fs.target           static  
+initrd-root-fs.target      static  
+initrd-switch-root.target  static  
+initrd.target              static  
+iprutils.target            disabled
+kexec.target               disabled
+local-fs-pre.target        static  
+local-fs.target            static  
+machines.target            disabled
+multi-user.target          enabled 
+network-online.target      static  
+network-pre.target         static  
+network.target             static  
+nfs-client.target          enabled 
+nss-lookup.target          static  
+nss-user-lookup.target     static  
+paths.target               static  
+poweroff.target            disabled
+printer.target             static  
+rdma-hw.target             static  
+reboot.target              disabled
+remote-cryptsetup.target   disabled
+remote-fs-pre.target       static  
+remote-fs.target           enabled 
+rescue.target              disabled
+rpc_pipefs.target          static  
+rpcbind.target             static  
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+X Window System（提供图形用户接口）'''''''''''''''''''''''''''''''''''''''''''
+X Window System由三部分组成：X Server 、X Client、X Protocol。
+
+X Server：主要处理输入输出信息；
+
+X Client：执行大部分应用程序的运算功能；
+
+X Protocol：建立X Server 和X Client的沟通管道。
+
+X Window通过软件工具和架构协议来建立操作系统所用的图形用户界面，
+几乎所有操作系统都支持X Window。GNOME、KDE这两个桌面环境也是以X Window为基础构建的。
+所以安装GNOME或KDE前，要先安装X Window System（它提供了图形用户接口）。
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+
+
+使用华为云提供的CentOS镜像源(x86_64)
+
+更新弹性云服务器的系统或者软件时，可以连接Internet，通过外部CentOS镜像源提供相关服务。但是，如果弹性云服务器无法访问Internet，或者外部CentOS镜像源提供的服务不稳定时，可以使用华为云提供的CentOS镜像源进行更新。
+本节操作适用于x86_64架构的云服务器。
+操作步骤
+
+1：以root用户登录弹性云服务器。
+2：执行以下命令，备份CentOS-Base.repo文件。
+mkdir -p /etc/yum.repos.d/repo_bak/
+
+mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repo_bak/
+
+3：使用curl命令下载对应版本的CentOS-Base.repo文件，并将其放入/etc/yum.repos.d/目录。
+针对华为云当前支持的CentOS镜像源版本，使用的curl命令分别如下：
+CentOS 8
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.myhuaweicloud.com/repo/CentOS-Base-8.repo
+
+CentOS 7
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.myhuaweicloud.com/repo/CentOS-Base-7.repo
+
+
+CentOS 6
+CentOS社区于2020年11月30日结束对CentOS 6的维护支持（EOL）。请参考CentOS 6镜像源更换方法。
+
+
+4：执行以下命令清除原有的yum缓存。
+yum clean all
+5：执行以下命令，生成缓存。
+yum makecache
+
+(苹果类电脑ARM)
+使用华为云提供的CentOS-Altarch镜像源(ARM)
+操作步骤
+1：以root用户登录弹性云服务器。
+2：执行以下命令，备份CentOS-Base.repo文件。
+mkdir -p /etc/yum.repos.d/repo_bak/
+mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repo_bak/
+3：使用curl命令下载对应版本的CentOS-Base.repo文件，并将其放入/etc/yum.repos.d/目录。
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.myhuaweicloud.com/repo/Centos-altarch-7.repo
+4：执行以下命令清除原有的yum缓存。
+yum clean all
+5：执行以下命令，生成新的缓存。
+yum makecache
